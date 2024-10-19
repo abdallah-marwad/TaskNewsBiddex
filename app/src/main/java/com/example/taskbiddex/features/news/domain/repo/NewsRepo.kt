@@ -5,5 +5,5 @@ import com.example.taskbiddex.features.news.data.model.article.Article
 import com.example.taskbiddex.features.news.data.model.article.NewsResponse
 
 interface NewsRepoAbstract  {
-    suspend fun getAllNews(page :  Int): Resource<MutableList<Article>?>
+    suspend fun getAllNews(page :  Int): Resource<NewsResponse?>
 }

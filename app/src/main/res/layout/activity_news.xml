@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:animateLayoutChanges="true"
     tools:context=".features.news.presentation.news.NewsActivity">
     <include
         android:id="@+id/appBar"
@@ -13,19 +14,20 @@
         android:layout_height="?actionBarSize"
         layout="@layout/app_bar"
         />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBreakingNews"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:clipToPadding="false"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_article"
-        android:paddingVertical="@dimen/_16sdp"
         android:layout_marginHorizontal="@dimen/_16sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:clipToPadding="false"
+        android:paddingVertical="@dimen/_16sdp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/pagingProgress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBar" />
+        app:layout_constraintTop_toBottomOf="@id/appBar"
+        tools:listitem="@layout/item_article" />
 
     <LinearLayout
         android:id="@+id/errArea"
@@ -54,4 +56,14 @@
             android:text="@string/some_err_happened"
             />
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pagingProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginBottom="@dimen/_8sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

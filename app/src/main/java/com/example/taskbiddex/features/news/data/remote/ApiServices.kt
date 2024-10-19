@@ -10,11 +10,13 @@ interface ApiServices {
     @GET("v2/everything")
     suspend fun getAllNews(
         @Query("sources")
-        category:String = "wired",
+        category:String = "abc-news",
         @Query("page")
         pageNumber:Int =1,
         @Query("apiKey")
         apiKey:String = Constant.API_KEY,
+        @Query("pageSize")
+        pageSize:Int = Constant.QUERY_PAGE_SIZE,
     ): Response<NewsResponse>
 
 

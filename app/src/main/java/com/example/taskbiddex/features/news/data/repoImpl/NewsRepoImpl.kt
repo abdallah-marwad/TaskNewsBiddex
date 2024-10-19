@@ -16,7 +16,7 @@ class NewsRepoImpl@Inject constructor(
     private val apiServices: ApiServices
 )  :  NewsRepoAbstract {
 
-    override suspend fun getAllNews(pageNum : Int): Resource<MutableList<Article>?> {
+    override suspend fun getAllNews(pageNum : Int): Resource<NewsResponse?> {
         if (!InternetConnection().hasInternetConnection())
             return Resource.Failure(ErrorType.NoInternet(Constant.noInterNetErrMsg))
         val response = try {
@@ -31,7 +31,7 @@ class NewsRepoImpl@Inject constructor(
         return when {
             response.body() == null || response.isSuccessful.not() ->
                 Resource.Failure(ErrorType.GeneralErr(Constant.generalErrMsg))
-            else -> Resource.Success(response.body()!!.articles)
+            else -> Resource.Success(response.body()!!)
         }
     }
 

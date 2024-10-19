@@ -17,18 +17,20 @@ import javax.inject.Inject
 class NewsViewModel@Inject constructor(
     private val newsUseCase: GetNewsUseCase
 ): BaseViewModel() {
-    private val _newsFlow = Channel<Resource<MutableList<Article>>>()
+    private var currentPage = 1
+    private val _newsFlow = Channel<Resource<NewsResponse?>>()
     val newsFlow by lazy { _newsFlow.receiveAsFlow() }
 
-    fun getAllNews(pageNum: Int = 1) {
+    fun getAllNews() {
         viewModelScope.launch(Dispatchers.IO) {
             _newsFlow.send(Resource.Loading())
-            when (val signInStatus = newsUseCase.invoke(pageNum)) {
+            when (val response = newsUseCase.invoke(currentPage)) {
                 is Resource.Failure<*> -> {
-                    handleFailure(signInStatus.message, _newsFlow)
+                    handleFailure(response.message, _newsFlow)
                 }
-                is Resource.Success<*> -> {
-                    _newsFlow.send(Resource.Success(signInStatus.data))
+                is Resource.Success -> {
+                    _newsFlow.send(Resource.Success(response.data))
+                    currentPage++
                 }
 
                 else -> {}

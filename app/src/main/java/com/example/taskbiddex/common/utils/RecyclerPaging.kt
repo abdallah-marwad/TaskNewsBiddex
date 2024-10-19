@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 /*
     created at 01/01/2024
     by Abdallah Marwad
@@ -25,6 +26,10 @@ class RecyclerPaging(private val shouldPaginateCallBack: ShouldPaginateCallBack)
 
     @Volatile
     var isPaginate = false
+
+    @Volatile
+    var lastPaginationTime = System.currentTimeMillis()
+
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
         if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
@@ -55,16 +60,21 @@ class RecyclerPaging(private val shouldPaginateCallBack: ShouldPaginateCallBack)
                 }
             }
             val shouldPaginate =
-                (isNotLoadingAndNotLastPage and isAtLastItem && isWholeLastItemVisible)
+                (isNotLoadingAndNotLastPage and isAtLastItem && isWholeLastItemVisible && isFewSecAgoFromLastPaginate())
             if (shouldPaginate) {
                 isLoading = true
                 isPaginate = true
                 withContext(Dispatchers.Main) {
                     shouldPaginateCallBack.shouldPaginateCallBack()
+                    lastPaginationTime = System.currentTimeMillis()
                 }
             }
         }
 
+    }
+
+    private fun isFewSecAgoFromLastPaginate(): Boolean {
+        return System.currentTimeMillis() - lastPaginationTime > 2000L
     }
 
     interface ShouldPaginateCallBack {

@@ -39,6 +39,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
         holder.binding.apply {
             Glide.with(root).load(article.urlToImage)
                 .placeholder(R.drawable.err_banner)
+                .override(360 , 360)
                 .error(R.drawable.err_banner)
                 .into(ivArticleImage)
             tvAuthor.text = article.author

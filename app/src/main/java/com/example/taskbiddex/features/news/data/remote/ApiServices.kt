@@ -10,7 +10,7 @@ interface ApiServices {
     @GET("v2/everything")
     suspend fun getAllNews(
         @Query("sources")
-        category:String = "abc-news",
+        category:String = "the-next-web",
         @Query("page")
         pageNumber:Int =1,
         @Query("apiKey")

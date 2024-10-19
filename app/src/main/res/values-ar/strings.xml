@@ -5,5 +5,7 @@
     <string name="some_err_happened">حدث خطأ ما، يرجى المحاولة مرة أخرى لاحقًا</string>
     <string name="loading">جاري التحميل...</string>
     <string name="articles">جميع الأخبار</string>
+    <string name="visit_website">زياره الموقع الإلكتروني</string>
+    <string name="err_happened_in_link">لا يمكن فتح هذا الرابط</string>
 
 </resources>

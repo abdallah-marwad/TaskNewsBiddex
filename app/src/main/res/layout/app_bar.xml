@@ -22,10 +22,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginHorizontal="@dimen/_16sdp"
         android:background="@drawable/btn_bg_ripple"
         android:maxLines="1"
         android:singleLine="true"
+        android:textAlignment="viewStart"
         android:ellipsize="end"
         android:text="@string/articles" />
     <ImageView

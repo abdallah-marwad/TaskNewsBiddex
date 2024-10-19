@@ -5,9 +5,10 @@ import com.example.taskbiddex.R
 
 object Constant {
 
-    const val API_KEY = "da8ca0a0ecd44772a2694cad342a6135"
+    const val API_KEY = "cdb0eb7d712847e0944ce82e39245299"
     const val BASE_URL = "https://newsapi.org/"
     const val  QUERY_PAGE_SIZE = 20
+    const val  ARTICLE = "ARTICLE"
     val generalErrMsg =
         MyApplication.myAppContext.resources?.getString(R.string.some_err_happened)
     val noInterNetErrMsg =

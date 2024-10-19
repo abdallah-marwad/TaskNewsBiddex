@@ -17,7 +17,7 @@ import javax.inject.Inject
 class NewsViewModel@Inject constructor(
     private val newsUseCase: GetNewsUseCase
 ): BaseViewModel() {
-    private var currentPage = 1
+    var currentPage = 1
     private val _newsFlow = Channel<Resource<NewsResponse?>>()
     val newsFlow by lazy { _newsFlow.receiveAsFlow() }
 

@@ -88,7 +88,7 @@ abstract class BaseActivityMVVM<VB : ViewBinding, VM : BaseViewModel> : AppCompa
         ).show()
     }
 
-    protected fun noInternetCallBack() {
+    protected open fun noInternetCallBack() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.noInternet.collect {

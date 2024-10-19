@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -50,7 +51,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
         holder.binding.root.setOnClickListener {
             onItemClickListener?.let {
                 if (article != null) {
-                    it(article)
+                    it(article , holder.binding.ivArticleImage)
                 }
             }
         }
@@ -60,8 +61,8 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
         notifyDataSetChanged()
     }
     // Lambda For Listener
-    private var onItemClickListener: ((Article) -> Unit)? = null
-    fun setOnClickListener(listener: (Article) -> Unit) {
+    private var onItemClickListener: ((Article , ImageView) -> Unit)? = null
+    fun setOnClickListener(listener: (Article , ImageView) -> Unit) {
         onItemClickListener = listener
     }
 

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?actionBarSize"
+    android:gravity="center_vertical"
+    android:elevation="@dimen/_2sdp"
+    android:background="@drawable/appbar_bg">
+
+    <ImageView
+        android:id="@+id/appbarImgBack"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:background="@drawable/btn_bg_ripple"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_back_android"
+        android:layout_marginStart="@dimen/_8sdp"
+        />
+
+    <TextView
+        android:id="@+id/appbarTxt"
+        style="@style/textTitleNormalStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:background="@drawable/btn_bg_ripple"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:text="@string/articles" />
+    <ImageView
+        android:id="@+id/appbarLang"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginEnd="@dimen/_4sdp"
+        android:background="@drawable/btn_bg_ripple"
+        android:scaleType="centerInside"
+        android:visibility="gone"
+
+        />
+</LinearLayout>

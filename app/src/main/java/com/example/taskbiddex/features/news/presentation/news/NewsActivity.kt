@@ -45,8 +45,8 @@ class NewsActivity : BaseActivityMVVM<ActivityNewsBinding, NewsViewModel>(),
 
     private fun swipeToRefreshAction() {
         recyclerPaging.isPaginate = false
+        recyclerPaging.isLastPage = false
         viewModel.isSwipedToRefresh = true
-        binding.rvBreakingNews.removeOnScrollListener(recyclerPaging)
         viewModel.getAllNews(pageNum = 1)
         binding.swipView.isRefreshing = false
     }
@@ -196,7 +196,6 @@ class NewsActivity : BaseActivityMVVM<ActivityNewsBinding, NewsViewModel>(),
         if(viewModel.isSwipedToRefresh) {
             newsAdapter.clearData()
             viewModel.isSwipedToRefresh = false
-            binding.rvBreakingNews.addOnScrollListener(recyclerPaging)
         }
         newsAdapter.submitPaginatedData(response.articles)
     }
@@ -208,7 +207,6 @@ class NewsActivity : BaseActivityMVVM<ActivityNewsBinding, NewsViewModel>(),
             recyclerPaging.isLastPage = true
     }
     override fun shouldPaginateCallBack() {
-        Log.d("test", "shouldPaginateCallBack())")
         viewModel.getAllNews()
     }
    // endregion

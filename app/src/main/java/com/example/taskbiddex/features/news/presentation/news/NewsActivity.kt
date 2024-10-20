@@ -44,6 +44,7 @@ class NewsActivity : BaseActivityMVVM<ActivityNewsBinding, NewsViewModel>(),
 
     private fun swipeToRefreshAction() {
         showShimmer()
+        viewModel.isSwipedToRefresh = true
         viewModel.getAllNews(pageNum = 1)
         binding.swipView.isRefreshing = false
     }
@@ -110,7 +111,7 @@ class NewsActivity : BaseActivityMVVM<ActivityNewsBinding, NewsViewModel>(),
         resourceMsg: Int = R.string.some_err_happened,
         resourceDrawable: Int = R.drawable.paper_img,
     ) {
-        if (viewModel.currentPage == 1)
+        if (viewModel.isFirstPage())
             showErrDataArea(resourceMsg ,resourceDrawable)
         else
             showDialogWithMsg(message)
@@ -153,10 +154,10 @@ class NewsActivity : BaseActivityMVVM<ActivityNewsBinding, NewsViewModel>(),
             showShimmer()
     }
     private fun showShimmer() {
+        binding.rvBreakingNews.visibility = View.GONE
+        binding.errArea.errArea.visibility = View.GONE
         binding.shimmer.shimmer.visibility = View.VISIBLE
         binding.shimmer.shimmer.startShimmer()
-        binding.rvBreakingNews.visibility = View.GONE
-
     }
     private fun hideShimmer() {
         binding.shimmer.shimmer.stopShimmer()
@@ -174,13 +175,12 @@ class NewsActivity : BaseActivityMVVM<ActivityNewsBinding, NewsViewModel>(),
     }
 
     private fun submitDataToAdapter(response: NewsResponse) {
-        // check for (viewModel.currentPage ==2) because it meaning
-        // that is first page and it may be come from
-        // swipe to refresh and the recycler could be contain data.
-        if(viewModel.currentPage ==2) newsAdapter.clearData()
+        if(viewModel.isSwipedToRefresh) {
+            newsAdapter.clearData()
+            viewModel.isSwipedToRefresh = false
+        }
         newsAdapter.submitPaginatedData(response.articles)
     }
-
     // endregion
 
     // region pagination

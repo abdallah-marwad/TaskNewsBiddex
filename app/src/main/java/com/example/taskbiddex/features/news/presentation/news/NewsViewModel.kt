@@ -16,6 +16,7 @@ import javax.inject.Inject
 class NewsViewModel@Inject constructor(
     private val newsUseCase: GetNewsUseCase
 ): BaseViewModel() {
+    var isSwipedToRefresh: Boolean = false
     var currentPage = 1
     private val _newsFlow = Channel<Resource<NewsResponse?>>()
     val newsFlow by lazy { _newsFlow.receiveAsFlow() }
@@ -29,12 +30,15 @@ class NewsViewModel@Inject constructor(
                     handleFailure(response.message, _newsFlow)
                 }
                 is Resource.Success -> {
-                    _newsFlow.send(Resource.Success(response.data))
                     currentPage++
+                    _newsFlow.send(Resource.Success(response.data))
                 }
 
                 else -> {}
             }
         }
+    }
+    fun isFirstPage(): Boolean{
+        return currentPage == 1
     }
 }

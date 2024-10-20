@@ -2,6 +2,7 @@ package com.example.taskbiddex.features.news.presentation.news
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
@@ -43,8 +44,9 @@ class NewsActivity : BaseActivityMVVM<ActivityNewsBinding, NewsViewModel>(),
     }
 
     private fun swipeToRefreshAction() {
-        showShimmer()
+        recyclerPaging.isPaginate = false
         viewModel.isSwipedToRefresh = true
+        binding.rvBreakingNews.removeOnScrollListener(recyclerPaging)
         viewModel.getAllNews(pageNum = 1)
         binding.swipView.isRefreshing = false
     }
@@ -73,7 +75,33 @@ class NewsActivity : BaseActivityMVVM<ActivityNewsBinding, NewsViewModel>(),
         )
         startActivity(intent, options.toBundle())
     }
+    private fun hideRV() {
+        binding.rvBreakingNews.visibility = View.GONE
+    }
+    private fun showRV() {
+        binding.rvBreakingNews.visibility = View.VISIBLE
+    }
+
+    private fun showShimmer() {
+        binding.shimmer.shimmer.visibility = View.VISIBLE
+        binding.shimmer.shimmer.startShimmer()
+    }
+    private fun hideShimmer() {
+        binding.shimmer.shimmer.stopShimmer()
+        binding.shimmer.shimmer.visibility = View.GONE
+    }
+    private fun showErrArea() {
+        binding.errArea.errArea.visibility = View.VISIBLE
+    }
+    private fun hideErrArea() {
+        binding.errArea.errArea.visibility = View.GONE
+    }
+    private fun hideProgress() {
+        binding.pagingProgress.visibility = View.GONE
+        hideShimmer()
+    }
     // endregion
+
 
     // region get all news
     private fun getAllNewsCallBack() {
@@ -112,17 +140,19 @@ class NewsActivity : BaseActivityMVVM<ActivityNewsBinding, NewsViewModel>(),
         resourceDrawable: Int = R.drawable.paper_img,
     ) {
         if (viewModel.isFirstPage())
-            showErrDataArea(resourceMsg ,resourceDrawable)
-        else
+            handleErrAreaData(resourceMsg ,resourceDrawable)
+        else {
+            showRV()
             showDialogWithMsg(message)
+        }
     }
 
-    private fun showErrDataArea(
+    private fun handleErrAreaData(
         resourceMsg: Int ,
         resourceDrawable: Int,
 
         ) {
-        binding.errArea.errArea.visibility = View.VISIBLE
+        showErrArea()
         binding.errArea.errTxt.text = getString(resourceMsg)
         binding.errArea.imgErr.setImageResource(resourceDrawable)
     }
@@ -131,6 +161,7 @@ class NewsActivity : BaseActivityMVVM<ActivityNewsBinding, NewsViewModel>(),
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.noInternet.collect {
+                    recyclerPaging.isLoading = false
                     hideProgress()
                     handleErr(
                         getString(R.string.check_internet_connection),
@@ -142,34 +173,21 @@ class NewsActivity : BaseActivityMVVM<ActivityNewsBinding, NewsViewModel>(),
         }
     }
 
-    private fun hideProgress() {
-        binding.pagingProgress.visibility = View.GONE
-        hideShimmer()
-    }
-
     private fun handleAllNewsLoading() {
+        hideErrArea()
         if (recyclerPaging.isPaginate)
             binding.pagingProgress.visibility = View.VISIBLE
-        else
+        else {
+            hideRV()
             showShimmer()
-    }
-    private fun showShimmer() {
-        binding.rvBreakingNews.visibility = View.GONE
-        binding.errArea.errArea.visibility = View.GONE
-        binding.shimmer.shimmer.visibility = View.VISIBLE
-        binding.shimmer.shimmer.startShimmer()
-    }
-    private fun hideShimmer() {
-        binding.shimmer.shimmer.stopShimmer()
-        binding.shimmer.shimmer.visibility = View.GONE
-        binding.rvBreakingNews.visibility = View.VISIBLE
-
+        }
     }
 
     private fun handleSuccessGetNews(response: NewsResponse) {
         recyclerPaging.isLoading = false
         hideProgress()
-        binding.errArea.errArea.visibility = View.GONE
+        hideErrArea()
+        showRV()
         submitDataToAdapter(response)
         handleLastPage(response.totalResults)
     }
@@ -178,6 +196,7 @@ class NewsActivity : BaseActivityMVVM<ActivityNewsBinding, NewsViewModel>(),
         if(viewModel.isSwipedToRefresh) {
             newsAdapter.clearData()
             viewModel.isSwipedToRefresh = false
+            binding.rvBreakingNews.addOnScrollListener(recyclerPaging)
         }
         newsAdapter.submitPaginatedData(response.articles)
     }
@@ -189,6 +208,7 @@ class NewsActivity : BaseActivityMVVM<ActivityNewsBinding, NewsViewModel>(),
             recyclerPaging.isLastPage = true
     }
     override fun shouldPaginateCallBack() {
+        Log.d("test", "shouldPaginateCallBack())")
         viewModel.getAllNews()
     }
    // endregion

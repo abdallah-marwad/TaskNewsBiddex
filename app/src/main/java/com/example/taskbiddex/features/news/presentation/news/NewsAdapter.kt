@@ -32,7 +32,6 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
-        Log.d("test" , "position = $position")
         var article = articleList[position]
         holder.binding.apply {
             Glide.with(root).load(article.urlToImage)

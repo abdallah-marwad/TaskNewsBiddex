@@ -1,4 +1,4 @@
-package com.example.taskbiddex.features.news.data.model.article
+package com.example.taskbiddex.features.news.domain.entity.article
 
 data class NewsResponse(
     val articles: MutableList<Article>,

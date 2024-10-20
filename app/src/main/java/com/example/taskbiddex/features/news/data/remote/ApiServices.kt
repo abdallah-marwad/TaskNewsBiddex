@@ -1,7 +1,7 @@
 package com.example.taskbiddex.features.news.data.remote
 
 import com.example.taskbiddex.common.utils.Constant
-import com.example.taskbiddex.features.news.data.model.article.NewsResponse
+import com.example.taskbiddex.features.news.domain.entity.article.NewsResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

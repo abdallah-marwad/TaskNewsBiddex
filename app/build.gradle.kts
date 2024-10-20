@@ -70,5 +70,9 @@ dependencies {
     // Glide
     implementation (libs.glide)
     implementation (libs.glide.compiler)
+    //shimmer
+    implementation(libs.shimmer)
+    //swipe to refresh
+    implementation(libs.swipe.refresh)
 
 }

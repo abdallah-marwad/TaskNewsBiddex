@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/bannerHome"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_90sdp"
+        app:cardCornerRadius="@dimen/_16sdp"
+        android:layout_marginVertical="@dimen/_8sdp"
+        android:layout_marginHorizontal="@dimen/_16sdp"
+        android:background="@color/shimmer_color"
+        app:cardBackgroundColor="@color/shimmer_color"
+        />
+</merge>

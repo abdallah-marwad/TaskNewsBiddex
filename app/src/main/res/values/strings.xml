@@ -7,6 +7,7 @@
     <string name="articles">All News</string>
     <string name="visit_website">Visit website</string>
     <string name="err_happened_in_link">Cannot open the link</string>
+    <string name="shared_img" translatable="false">sharedImage</string>
 
 
 </resources>

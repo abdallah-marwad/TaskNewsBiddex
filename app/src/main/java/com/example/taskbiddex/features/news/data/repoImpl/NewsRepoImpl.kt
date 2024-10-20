@@ -4,8 +4,7 @@ package com.example.taskbiddex.features.news.data.repoImpl
 import com.example.taskbiddex.common.utils.Constant
 import com.example.taskbiddex.common.utils.ErrorType
 import com.example.taskbiddex.common.utils.Resource
-import com.example.taskbiddex.features.news.data.model.article.Article
-import com.example.taskbiddex.features.news.data.model.article.NewsResponse
+import com.example.taskbiddex.features.news.domain.entity.article.NewsResponse
 import com.example.taskbiddex.features.news.data.remote.ApiServices
 import com.example.taskbiddex.features.news.domain.repo.NewsRepoAbstract
 import com.tailors.doctoria.utils.InternetConnection

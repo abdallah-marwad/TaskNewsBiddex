@@ -3,6 +3,7 @@ package com.example.taskbiddex.features.news.presentation.news
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -13,7 +14,8 @@ import com.example.taskbiddex.common.utils.Constant
 import com.example.taskbiddex.common.utils.RecyclerPaging
 import com.example.taskbiddex.common.utils.Resource
 import com.example.taskbiddex.databinding.ActivityNewsBinding
-import com.example.taskbiddex.features.news.data.model.article.NewsResponse
+import com.example.taskbiddex.features.news.domain.entity.article.Article
+import com.example.taskbiddex.features.news.domain.entity.article.NewsResponse
 import com.example.taskbiddex.features.news.presentation.newsDetails.NewsDetailsActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -30,6 +32,20 @@ class NewsActivity : BaseActivityMVVM<ActivityNewsBinding, NewsViewModel>(),
         initViews()
         viewModel.getAllNews()
         getAllNewsCallBack()
+        activityOnClick()
+    }
+
+    private fun activityOnClick() {
+        binding.swipView.setOnRefreshListener {
+           swipeToRefreshAction()
+        }
+        newsItemClick()
+    }
+
+    private fun swipeToRefreshAction() {
+        showShimmer()
+        viewModel.getAllNews(pageNum = 1)
+        binding.swipView.isRefreshing = false
     }
 
     override fun getViewModelClass(): Class<NewsViewModel> {
@@ -41,17 +57,20 @@ class NewsActivity : BaseActivityMVVM<ActivityNewsBinding, NewsViewModel>(),
         binding.appBar.appbarImgBack.visibility = View.GONE
         binding.rvBreakingNews.adapter = newsAdapter
         binding.rvBreakingNews.addOnScrollListener(recyclerPaging)
-        newsItemClick()
     }
     private fun newsItemClick() {
-        newsAdapter.setOnClickListener { article , image->
-            val intent = Intent(this , NewsDetailsActivity::class.java)
-            intent.putExtra(Constant.ARTICLE, article)
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                this, image, "sharedImage"
-            )
-            startActivity(intent, options.toBundle())
+        newsAdapter.setOnClickListener { article, image ->
+            startNewsDetailsScreenWithSharedImg(article , image)
         }
+    }
+
+    private fun startNewsDetailsScreenWithSharedImg(article: Article, image: ImageView) {
+        val intent = Intent(this , NewsDetailsActivity::class.java)
+        intent.putExtra(Constant.ARTICLE, article)
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+            this, image, getString(R.string.shared_img)
+        )
+        startActivity(intent, options.toBundle())
     }
     // endregion
 
@@ -82,7 +101,7 @@ class NewsActivity : BaseActivityMVVM<ActivityNewsBinding, NewsViewModel>(),
 
     private fun handleAllNewsFailure(message: String) {
         recyclerPaging.isLoading = false
-        hideProgresses()
+        hideProgress()
         handleErr(message)
     }
 
@@ -102,16 +121,16 @@ class NewsActivity : BaseActivityMVVM<ActivityNewsBinding, NewsViewModel>(),
         resourceDrawable: Int,
 
         ) {
-        binding.errArea.visibility = View.VISIBLE
-        binding.errTxt.text = getString(resourceMsg)
-        binding.imgErr.setImageResource(resourceDrawable)
+        binding.errArea.errArea.visibility = View.VISIBLE
+        binding.errArea.errTxt.text = getString(resourceMsg)
+        binding.errArea.imgErr.setImageResource(resourceDrawable)
     }
 
     override fun noInternetCallBack() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.noInternet.collect {
-                    hideProgresses()
+                    hideProgress()
                     handleErr(
                         getString(R.string.check_internet_connection),
                         R.string.check_internet_connection,
@@ -122,24 +141,44 @@ class NewsActivity : BaseActivityMVVM<ActivityNewsBinding, NewsViewModel>(),
         }
     }
 
-    private fun hideProgresses() {
+    private fun hideProgress() {
         binding.pagingProgress.visibility = View.GONE
-        hideProgressDialog()
+        hideShimmer()
     }
 
     private fun handleAllNewsLoading() {
         if (recyclerPaging.isPaginate)
             binding.pagingProgress.visibility = View.VISIBLE
         else
-            showProgressDialog()
+            showShimmer()
+    }
+    private fun showShimmer() {
+        binding.shimmer.shimmer.visibility = View.VISIBLE
+        binding.shimmer.shimmer.startShimmer()
+        binding.rvBreakingNews.visibility = View.GONE
+
+    }
+    private fun hideShimmer() {
+        binding.shimmer.shimmer.stopShimmer()
+        binding.shimmer.shimmer.visibility = View.GONE
+        binding.rvBreakingNews.visibility = View.VISIBLE
+
     }
 
     private fun handleSuccessGetNews(response: NewsResponse) {
         recyclerPaging.isLoading = false
-        hideProgresses()
-        binding.errArea.visibility = View.GONE
-        newsAdapter.submitPaginatedData(response.articles)
+        hideProgress()
+        binding.errArea.errArea.visibility = View.GONE
+        submitDataToAdapter(response)
         handleLastPage(response.totalResults)
+    }
+
+    private fun submitDataToAdapter(response: NewsResponse) {
+        // check for (viewModel.currentPage ==2) because it meaning
+        // that is first page and it may be come from
+        // swipe to refresh and the recycler could be contain data.
+        if(viewModel.currentPage ==2) newsAdapter.clearData()
+        newsAdapter.submitPaginatedData(response.articles)
     }
 
     // endregion

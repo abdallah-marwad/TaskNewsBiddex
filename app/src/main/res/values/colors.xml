@@ -7,5 +7,6 @@
     <color name="red">#FF0000</color>
     <color name="black_65_opacity">#A6212121</color>
     <color name="gray">#7C7C7C</color>
+    <color name="shimmer_color">#D8D7D7</color>
 
 </resources>

@@ -15,6 +15,8 @@ hilt-compiler = "1.2.0"
 retrofit = "2.9.0"
 okhttp3 = "4.10.0"
 glide = "4.11.0"
+shimmer = "0.5.0"
+swipe-refresh = "1.2.0-alpha01"
 lifecycle-viewmodel = "2.8.4"
 
 [libraries]
@@ -37,6 +39,8 @@ hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-comp
 hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hilt-compiler" }
 glide= { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
+shimmer = { group = "com.facebook.shimmer", name = "shimmer", version.ref = "shimmer" }
+swipe-refresh = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swipe-refresh" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

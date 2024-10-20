@@ -1,19 +1,16 @@
 package com.example.taskbiddex.features.news.presentation.news
 
-import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.taskbiddex.R
 import com.example.taskbiddex.common.utils.DateFormatter
 import com.example.taskbiddex.databinding.ItemArticleBinding
-import com.example.taskbiddex.features.news.data.model.article.Article
+import com.example.taskbiddex.features.news.domain.entity.article.Article
 
 class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
     inner class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -42,6 +39,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
                 .placeholder(R.drawable.err_banner)
                 .override(360 , 360)
                 .error(R.drawable.err_banner)
+                .dontAnimate()
                 .into(ivArticleImage)
             tvAuthor.text = article.author
             title.text = article.title
@@ -60,9 +58,12 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
         articleList.addAll(newArticles)
         notifyDataSetChanged()
     }
+    fun clearData() {
+        articleList.clear()
+    }
     // Lambda For Listener
-    private var onItemClickListener: ((Article , ImageView) -> Unit)? = null
-    fun setOnClickListener(listener: (Article , ImageView) -> Unit) {
+    private var onItemClickListener: ((Article, ImageView) -> Unit)? = null
+    fun setOnClickListener(listener: (Article, ImageView) -> Unit) {
         onItemClickListener = listener
     }
 

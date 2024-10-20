@@ -8,7 +8,7 @@ import com.example.taskbiddex.common.utils.Constant
 import com.example.taskbiddex.common.utils.DateFormatter
 import com.example.taskbiddex.common.utils.UrlOpener
 import com.example.taskbiddex.databinding.ActivityNewsDetailsBinding
-import com.example.taskbiddex.features.news.data.model.article.Article
+import com.example.taskbiddex.features.news.domain.entity.article.Article
 
 class NewsDetailsActivity : BaseActivity<ActivityNewsDetailsBinding>() {
     lateinit var article : Article
